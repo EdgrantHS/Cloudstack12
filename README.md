@@ -302,7 +302,9 @@ This installs the `uuid` package, generates a unique UUID for the host, and appe
 ```bash
 sudo apt-get install uuid -y
 UUID=$(uuid)
-sudo echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+sudo su
+echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+exit
 ```
 
 This command generates a unique UUID and appends it to the `libvirtd.conf` file. It's important to ensure that in the `libvirtd.conf` file, the UUID is correctly inserted because it is very common for the UUID not to have a value.
