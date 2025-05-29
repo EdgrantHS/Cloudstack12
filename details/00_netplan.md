@@ -30,12 +30,12 @@ In this step, we will configure the network settings for the host. The host will
 cd /etc/netplan
 sudo chmod 600 /etc/netplan/01-netcfg.yaml
 ```
-> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
 
 ### Netplan Explanation
 
 - `cd path` changes the directory to the specified path.
 - `sudo -e filename` opens the file in the default editor. The default should be `nano`, but we've changed it to `nvim` in the `~/.bashrc` file.
+- `600` command ensures that only the root user can read and write the file.
 
 ### Netplan Notes
 
@@ -123,7 +123,7 @@ sudo netplan apply
 
 ### Netplan Apply Image
 
-![Netplan Apply](../images/cli/3apply.png)
+![Netplan Apply](../images/cli/03apply.png)
 
 ## Validation
 
