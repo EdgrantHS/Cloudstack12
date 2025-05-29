@@ -599,6 +599,8 @@ It is common to encounter network issues, because the reserved IP address alread
 
 ## Cloudstack Configration and VM Installation
 
+**<center>[Click for Detailed Utils Explanation](/details/06_cloudstack_configuration.md)</center>**
+
 ### Download the ISO
 
 Download the ISO file for the operating system you want to install on your VM.
