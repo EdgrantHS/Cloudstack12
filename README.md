@@ -1,13 +1,13 @@
 <!--
 TODO: 
 - Add Tailscale advertising to utils (done)
-- Add fish to utils
 - Add Wifi netplan to utils (done)
 - Add chmod 600 permission change for netplan (done)
-- Refine the 05_website_configuration.md explanation
+- Refine the 05_website_configuration.md explanation (done)
+- Edit change the IP interface enp1s3 to enp1s0 (done)
 - Add more explanation to the 07_cloudstack_network_configuration.md
 - Add Electrical Engineering Department in the contributor (done)
-- Add video explanatoin
+- Add video explanation
   -->
 # Single Node Apache Cloudstack Private Cloud Installation Guide
 
@@ -151,9 +151,9 @@ network:
   bridges:
     cloudbr0:
       interfaces:
-        - enp0s3
+        - enp1s0 # Your interface
       addresses:
-        - 192.168.1.220/24 #Your host IP address
+        - 192.168.1.220/24 # Your host IP address
       routes:
         - to: default
           via: 192.168.1.1
@@ -399,7 +399,7 @@ apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
 
 Installing the CloudStack Management Server
 
-**<center>[Click for Detailed Website Installation Explanation](/details/01_utils.md)</center>**
+**<center>[Click for Detailed Website Installation Explanation](/details/05_website_configuration)</center>**
 
 ### Install Cloudstack Management Server
 

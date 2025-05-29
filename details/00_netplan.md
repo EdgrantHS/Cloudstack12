@@ -61,9 +61,9 @@ network:
   bridges:
     cloudbr0:
       interfaces:
-        - enp0s3
+        - enp1s0 # Your interface
       addresses:
-        - 192.168.1.220/24 #Your host IP address
+        - 192.168.1.220/24 # Your host IP address
       routes:
         - to: default
           via: 192.168.1.1
@@ -79,6 +79,7 @@ network:
         stp: false
         forward-delay: 0
 ```
+> Run `ip a` command to check all the active interfaces and IPs
 
 ### IP Change Explanation
 
