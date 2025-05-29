@@ -102,10 +102,9 @@ Public IP: 192.168.1.226 - 192.168.1.230
 Update the system and install necessary tools, this might take a while.
 
 ```bash
-sudo su
-apt update -y
-apt upgrade -y
-apt install bridge-utils
+sudo apt update -y
+sudo apt upgrade -y
+sudo apt install bridge-utils
 ```
 
 ## Utils Set Up
@@ -416,10 +415,10 @@ When prompted, answer **Yes** to save current rules.
 Some versions of libvirt may require AppArmor to be disabled to work properly:
 
 ```bash
-ln -s /etc/apparmor.d/usr.sbin.libvirtd /etc/apparmor.d/disable/
-ln -s /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper /etc/apparmor.d/disable/
-apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
-apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
+sudo ln -s /etc/apparmor.d/usr.sbin.libvirtd /etc/apparmor.d/disable/
+sudo ln -s /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper /etc/apparmor.d/disable/
+sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
+sudo apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
 ```
 
 ---
