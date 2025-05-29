@@ -249,7 +249,7 @@ Installing and configuring a CloudStack host with KVM hypervisor, libvirt TCP ac
 This command installs the QEMU-KVM hypervisor and the CloudStack agent, which enables the host to connect and communicate with the CloudStack management server.
 
 ```bash
-apt-get install qemu-kvm cloudstack-agent -y
+sudo apt-get install qemu-kvm cloudstack-agent -y
 ```
 
 ### Configure KVM Virtualization Management
@@ -257,7 +257,7 @@ apt-get install qemu-kvm cloudstack-agent -y
 This modifies the `libvirtd` default configuration to enable the daemon to listen for remote connections by setting `LIBVIRTD_ARGS="--listen"`.
 
 ```bash
-sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
+sudo sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
 ```
 
 ### Libvirt TCP Configuration
@@ -265,11 +265,11 @@ sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
 These commands configure `libvirtd` to allow TCP connections without authentication. TLS is disabled, TCP is enabled on port 16509 (the default libvirt port), mDNS advertisement is turned off, and no authentication is required for TCP connections.
 
 ```bash
-echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
-echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
-echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
-echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
-echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
+sudo echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
+sudo echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
+sudo echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
+sudo echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
+sudo echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
 ```
 
 ### Restart libvirtd
@@ -286,9 +286,9 @@ systemctl restart libvirtd
 These kernel parameters are adjusted to prevent issues with Docker and other services by disabling bridge network calls to `iptables` and `arptables`.
 
 ```bash
-echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
-echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
-sysctl -p
+sudo echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
+sudo echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
+sudo sysctl -p
 ```
 
 ### Generate Unique Host ID
@@ -296,9 +296,9 @@ sysctl -p
 This installs the `uuid` package, generates a unique UUID for the host, and appends it to the `libvirtd` configuration to ensure each host has a distinct identifier.
 
 ```bash
-apt-get install uuid -y
+sudo apt-get install uuid -y
 UUID=$(uuid)
-echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+sudo echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
 ```
 
 This command generates a unique UUID and appends it to the `libvirtd.conf` file. It's important to ensure that in the `libvirtd.conf` file, the UUID is correctly inserted because it is very common for the UUID not to have a value.
