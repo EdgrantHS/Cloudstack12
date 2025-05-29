@@ -206,7 +206,7 @@ sudo apt-get install cloudstack-management mysql-server
 ### Configure Mysql Config File
 
 ```bash
-sudo -e/etc/mysql/mysql.conf.d/mysqld.cnf
+sudo -e /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
 ```bash
