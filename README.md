@@ -1,12 +1,12 @@
 <!--
 TODO: 
-- Add Tailscale advertising to utils
+- Add Tailscale advertising to utils (done)
 - Add fish to utils
-- Add Wifi netplan to utils
-- Add chmod 600 permission change for netplan
+- Add Wifi netplan to utils (done)
+- Add chmod 600 permission change for netplan (done)
 - Refine the 05_website_configuration.md explanation
 - Add more explanation to the 07_cloudstack_network_configuration.md
-- Add Electrical Engineering Department in the contributor
+- Add Electrical Engineering Department in the contributor (done)
 - Add video explanatoin
   -->
 # Single Node Apache Cloudstack Private Cloud Installation Guide
@@ -57,7 +57,7 @@ TODO:
     - [Cloudstack Network Configuration](#cloudstack-network-configuration)
 
 ## Contributor
-
+👨‍💻 Guides Made by Computer Engineering Students from Universitas Indonesia.
 - [Edgrant Henderson Suryajaya](https://github.com/EdgrantHS)
 - [Miranti Anggunsari](https://www.github.com/rantiaaa)
 - [Muhammad Rifki Pratama](https://github.com/MRifkiPratama)
@@ -130,8 +130,9 @@ The netplan configuration is similar to the network/wifi setting in Ubuntu Deskt
 
 ```bash
 cd /etc/netplan
-sudo -e /etc/netplan/01-static-netcfg.yaml
+sudo chmod 600 /etc/netplan/01-netcfg.yaml
 ```
+> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
 
 ### Change the IP
 

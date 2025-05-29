@@ -28,8 +28,9 @@ In this step, we will configure the network settings for the host. The host will
 
 ```bash
 cd /etc/netplan
-sudo -e /etc/netplan/01-static-netcfg.yaml
+sudo chmod 600 /etc/netplan/01-netcfg.yaml
 ```
+> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
 
 ### Netplan Explanation
 

@@ -16,9 +16,10 @@ In this section, we will set up some tools that will help in the installation pr
   - [Tailscale Configuration](#tailscale-configuration)
     - [Install Tailscale](#install-tailscale)
     - [Start Tailscale](#start-tailscale)
+    - [Advertise Tailscale Routes](#advertise-tailscale-routes)
     - [Confirm Tailscale](#confirm-tailscale)
     - [Using Tailscale](#using-tailscale)
-  - [Wi-Fi Configuration](#wifi-configuration)
+  - [Wi-Fi Configuration](#wi-fi-configuration)
     - [Edit Netplan Configuration](#edit-the-netplan-configuration)
     - [Add Wi-Fi Configuration](#add-the-wi-fi-configuration)
     - [Apply New Configuration](#apply-the-configuration)
@@ -126,6 +127,16 @@ sudo tailscale up
 
 This will start Tailscale and give you a URL to authenticate your device. Open the URL in the browser of your personal computer and log in with your Tailscale account. After logging in, a confirmation message will show up in the terminal.
 
+### Advertise Tailscale Routes
+
+If your host needs to act as a subnet router or use Tailscale tagging, you can enable advertising:
+```bash
+sudo tailscale up --advertise-routes=192.168.1.0/24
+```
+> Replace 192.168.1.0/24 with the subnet you want the host to route traffic for. After running the command above, open the Tailscale Admin Console, select your device (e.g., mizuki), and enable the advertised route by checking the box like below:
+
+![tailscale advertise](../images/utils/08advertise.png)
+
 ### Confirm Tailscale
 
 To check if Tailscale is running, run the following command:
@@ -151,7 +162,6 @@ ssh root@100.82.42.88
 This will SSH into your host using the Tailscale IP address. You can also use the Tailscale IP address to access the web interface of the host. Later on, we will need to open the web interface to access the CloudStack dashboard. This can be done by inputting the Tailscale IP address in the browser of your personal computer.
 
 Example: `http://100.82.42.88:8080`
-
 
 ## Wi-Fi Configuration
 
