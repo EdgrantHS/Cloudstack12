@@ -233,7 +233,7 @@ systemctl status mysql
 Deploy the CloudStack database using root credentials and set up the default user.
 
 ```bash
-cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:teep1 -i 192.168.1.220
+cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password -i 192.168.1.220
 ```
 
 ---
