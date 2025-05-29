@@ -432,7 +432,7 @@ Installing the CloudStack Management Server
 ### Install Cloudstack Management Server
 
 ```bash
-cloudstack-setup-management
+sudo cloudstack-setup-management
 systemctl status cloudstack-management
 tail -f /var/log/cloudstack/management/management-server.log
 ```
