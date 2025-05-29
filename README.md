@@ -266,11 +266,17 @@ These commands configure `libvirtd` to allow TCP connections without authenticat
 
 ```bash
 sudo su
+```
+
+```bash
 echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
 echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
 echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
 echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
 echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
+```
+
+```bash
 exit
 ```
 
@@ -289,9 +295,15 @@ These kernel parameters are adjusted to prevent issues with Docker and other ser
 
 ```bash
 sudo su
+```
+
+```bash
 echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
 sysctl -p
+```
+
+```bash
 exit
 ```
 
@@ -301,9 +313,20 @@ This installs the `uuid` package, generates a unique UUID for the host, and appe
 
 ```bash
 sudo apt-get install uuid -y
-UUID=$(uuid)
+```
+
+```bash
 sudo su
+```
+
+```bash
+UUID=$(uuid)
 echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+exit
+```
+
+
+```bash
 exit
 ```
 
