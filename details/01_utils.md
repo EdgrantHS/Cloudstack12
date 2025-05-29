@@ -156,9 +156,11 @@ Example: `http://100.82.42.88:8080`
 ## Wi-Fi Configuration
 
 You only need to set this configuration when Ethernet is unavailable or inconvenient, for example:
-  - If your device lacks a physical Ethernet port
-  - When the Ethernet port is difficult to access
-  - Or when you frequently move the device between locations.
+
+  - If your device lacks a physical Ethernet port,
+  - When the Ethernet port is difficult to access, or
+  - When you frequently move the device between locations.
+
 This action is recommended because Wi-Fi offers greater flexibility in these scenarios compared to constantly plugging and unplugging an Ethernet cable. This method would allow the system to connect automatically to Wi-Fi on boot without relying on an Ethernet cable.
 
 ### Edit the netplan configuration:

@@ -30,6 +30,7 @@ TODO:
     - [Change the IP](#change-the-ip)
     - [Confirm Netplan](#confirm-netplan)
   - [Cloudstack Installation](#cloudstack-installation)
+    - [Add CloudStack Repository and GPG Key](#add-cloudstack-repository-and-gpg-key)
     - [Installing Cloudstack and Mysql Server](#installing-cloudstack-and-mysql-server)
     - [Configure Mysql Config File](#configure-mysql-config-file)
     - [Restart and check mysql service status](#restart-and-check-mysql-service-status)
@@ -181,13 +182,24 @@ Installing Apache CloudStack Management Server, database, and NFS configuration 
 
 **<center>[Click for Detailed Installation Explanation](/details/03_cloudstack_installation.md)</center>**
 
+### Add CloudStack Repository and GPG Key
+
+Add the official CloudStack repository and its GPG key to allow package installation.
+
+```bash
+sudo -i
+mkdir -p /etc/apt/keyrings
+wget -O- http://packages.shapeblue.com/release.asc | gpg --dearmor | sudo tee /etc/apt/keyrings/cloudstack.gpg > /dev/null
+echo deb [signed-by=/etc/apt/keyrings/cloudstack.gpg] http://packages.shapeblue.com/cloudstack/upstream/debian/4.18 / > /etc/apt/sources.list.d/cloudstack.list
+```
+
 ### Installing Cloudstack and Mysql Server
 
 Update package index and install the CloudStack Management Server and MySQL.
 
 ```bash
-apt-get update -y
-apt-get install cloudstack-management mysql-server
+sudo apt-get update -y
+sudo apt-get install cloudstack-management mysql-server
 ```
 
 ### Configure Mysql Config File

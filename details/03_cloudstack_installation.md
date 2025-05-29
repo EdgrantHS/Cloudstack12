@@ -32,9 +32,13 @@ echo deb [signed-by=/etc/apt/keyrings/cloudstack.gpg] http://packages.shapeblue.
 
 Update package index and install the CloudStack Management Server and MySQL.
 
+### Installing Cloudstack and Mysql Server
+
+Update package index and install the CloudStack Management Server and MySQL.
+
 ```bash
-apt-get update -y
-apt-get install cloudstack-management mysql-server
+sudo apt-get update -y
+sudo apt-get install cloudstack-management mysql-server
 ```
 
 ![Installing Cloudstack and mysql server](../images/cloudstack-installation/01_install.png)
