@@ -29,7 +29,7 @@
 Install the QEMU-KVM hypervisor and the CloudStack agent that enable host to connect and communicate with the CloudStack management server.
 
 ```bash
-apt-get install qemu-kvm cloudstack-agent -y
+sudo apt-get install qemu-kvm cloudstack-agent -y
 ```
 
 ![1](../images/cloudstack-host-kvm/01_install-cloudstack-agent.png)
@@ -39,7 +39,7 @@ apt-get install qemu-kvm cloudstack-agent -y
 Modify the `libvirtd` default configuration to enable the daemon to listen for remote connections.
 
 ```bash
-sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
+sudo sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
 ```
 
 ![2](../images/cloudstack-host-kvm/02_configure-kvm-virtualization.png)
@@ -49,11 +49,13 @@ sed -i.bak 's/^\(LIBVIRTD_ARGS=\).*/\1"--listen"/' /etc/default/libvirtd
 Allow TCP connections without authentication, disable TLS, enable TCP on default port, turn off mDNS advertisement.
 
 ```bash
+sudo su
 echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
 echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
 echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
 echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
 echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
+exit
 ```
 
 ![3](../images/cloudstack-host-kvm/03_libvirt-tcp-configuration.png)
@@ -63,8 +65,8 @@ echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
 Mask the default libvirt sockets that are not needed and restarts the `libvirtd` service to apply the changes.
 
 ```bash
-systemctl mask libvirtd.socket libvirtd-ro.socket libvirtd-admin.socket libvirtd-tls.socket libvirtd-tcp.socket
-systemctl restart libvirtd
+sudo systemctl mask libvirtd.socket libvirtd-ro.socket libvirtd-admin.socket libvirtd-tls.socket libvirtd-tcp.socket
+sudo systemctl restart libvirtd
 ```
 
 ![4](../images/cloudstack-host-kvm/04_restart-libvirt.png)
@@ -74,32 +76,63 @@ systemctl restart libvirtd
 Adjust kernel parameters to prevent issues with Docker and other services by disabling some bridge network.
 
 ```bash
+sudo su
 echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
 sysctl -p
+exit
 ```
 
 ![5](../images/cloudstack-host-kvm/05_configure-other-services.png)
 
 ## Generate Unique Host ID
 
-Install the `uuid` packages and generated a unique ID for every host.
+Install the `uuid` packages by running this following command:
 
 ```bash
-apt-get install uuid -y
-UUID=$(uuid)
+sudo apt-get install uuid -y
+```
+
+Generated a unique ID for every host.
+```bash
+sudo su
+UUID=$(uuidgen)
 echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+exit
 ```
 
 ![6a](../images/cloudstack-host-kvm/06_generate-uuid.png)
 
-> **Note:** If the UUID is not written correctly into the configuration file, repeat the command `UUID=$(uuid)` and verify with:
->
+> **Note**:
+> To check if the UUID is correctly inserted, run the following command:
+
 > ```bash
-> nvim /etc/libvirt/libvirtd.conf
+> sudo -e /etc/libvirt/libvirtd.conf
 > ```
->
-> ![6b](../images/cloudstack-host-kvm/06_check-uuid.png) > ![6c](../images/cloudstack-host-kvm/06_regenerate-uuid.png)
+
+> Scroll to the bottom of the file and check if the UUID is correctly inserted. If it is not, repeat the command `UUID=$(uuidgen)` and check again. You need to delete the previous failed host_uuid in the libvirtd.conf file.
+
+> if the UUID is inserted correctly, you should see something like this:
+> ```bash
+> host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+> ```
+
+> if the UUID is not written correctly, you should see something like this:
+> ```bash
+> host_uuid = ""
+> # or
+> host_uuid =
+> ```
+
+> After repeating the command `UUID=$(uuidgen)` and checking again, you should see the UUID correctly inserted in the `libvirtd.conf` file.
+> ```bash
+> host uuid = ""
+> host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
+> ```
+> You can delete the previous failed host_uuid in the `libvirtd.conf` file.
+
+![6b](../images/cloudstack-host-kvm/06_check-uuid.png)
+![6c](../images/cloudstack-host-kvm/06_regenerate-uuid.png)
 
 ## Restart libvirtd (after updating UUID)
 

@@ -5,7 +5,7 @@ TODO:
 - Add chmod 600 permission change for netplan (done)
 - Refine the 05_website_configuration.md explanation (done)
 - Edit change the IP interface enp1s3 to enp1s0 (done)
-- Add more explanation to the 07_cloudstack_network_configuration.md
+- Add more explanation to the 06_cloudstack_network_configuration.md (done)
 - Add Electrical Engineering Department in the contributor (done)
 - Add video explanation
   -->
@@ -33,7 +33,7 @@ TODO:
     - [Add CloudStack Repository and GPG Key](#add-cloudstack-repository-and-gpg-key)
     - [Installing Cloudstack and Mysql Server](#installing-cloudstack-and-mysql-server)
     - [Configure Mysql Config File](#configure-mysql-config-file)
-    - [Restart and check mysql service status](#restart-and-check-mysql-service-status)
+    - [Restart and check mysql service status](#restart-mysql-service)
     - [Deploy Database as Root and create user name and password](#deploy-database-as-root-and-create-user-name-and-password)
   - [Configure Cloudstack Host with KVM Hypervisor](#configure-cloudstack-host-with-kvm-hypervisor)
     - [Install KVM and Cloudstack Agent](#install-kvm-and-cloudstack-agent)
@@ -215,10 +215,12 @@ sudo apt-get install cloudstack-management mysql-server
 
 ### Configure Mysql Config File
 
+Use the following command to open the MySQL configuration file in edit mode:
 ```bash
 sudo -e /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
+Inside the `mysqld` section of the file, add or update the following lines:
 ```bash
 server-id = 1
 sql-mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ZERO_IN_DATE,NO_ENGINE_SUBSTITUTION"
@@ -229,13 +231,12 @@ log-bin=mysql-bin
 binlog-format = 'ROW'
 ```
 
-### Restart and check mysql service status
+### Restart MySQL Service
 
-Restart MySQL to apply changes and verify it's running.
+Restart MySQL to apply the changes.
 
 ```bash
 systemctl restart mysql
-systemctl status mysql
 ```
 
 ### Deploy Database as Root and create user name and password
@@ -276,17 +277,11 @@ These commands configure `libvirtd` to allow TCP connections without authenticat
 
 ```bash
 sudo su
-```
-
-```bash
 echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
 echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
 echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
 echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
 echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
-```
-
-```bash
 exit
 ```
 
@@ -295,8 +290,8 @@ exit
 This masks the default libvirt sockets that are not needed and restarts the `libvirtd` service to apply the changes.
 
 ```bash
-systemctl mask libvirtd.socket libvirtd-ro.socket libvirtd-admin.socket libvirtd-tls.socket libvirtd-tcp.socket
-systemctl restart libvirtd
+sudo systemctl mask libvirtd.socket libvirtd-ro.socket libvirtd-admin.socket libvirtd-tls.socket libvirtd-tcp.socket
+sudo systemctl restart libvirtd
 ```
 
 ### Configuration to Support Docker and Other Services
@@ -305,15 +300,9 @@ These kernel parameters are adjusted to prevent issues with Docker and other ser
 
 ```bash
 sudo su
-```
-
-```bash
 echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
 sysctl -p
-```
-
-```bash
 exit
 ```
 
@@ -327,16 +316,8 @@ sudo apt-get install uuid -y
 
 ```bash
 sudo su
-```
-
-```bash
-UUID=$(uuid)
+UUID=$(uuidgen)
 echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
-exit
-```
-
-
-```bash
 exit
 ```
 
@@ -348,30 +329,26 @@ To check if the UUID is correctly inserted, run the following command:
 sudo -e /etc/libvirt/libvirtd.conf
 ```
 
-Scroll to the bottom of the file and check if the UUID is correctly inserted. If it is not, repeat the command `UUID=$(uuid)` and check again. You need to delete the previous failed  host_uuid in the `libvirtd.conf` file.
+Scroll to the bottom of the file and check if the UUID is correctly inserted. If it is not, repeat the command `UUID=$(uuidgen)` and check again. You need to delete the previous failed host_uuid in the libvirtd.conf file.
 
 if the UUID is inserted correctly, you should see something like this:
-
 ```bash
 host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 ```
 
 if the UUID is not written correctly, you should see something like this:
-
 ```bash
 host_uuid = ""
 # or
 host_uuid =
 ```
 
-After repeating the command `UUID=$(uuid)` and checking again, you should see the UUID correctly inserted in the `libvirtd.conf` file.
-
+After repeating the command `UUID=$(uuidgen)` and checking again, you should see the UUID correctly inserted in the `libvirtd.conf` file.
 ```bash
 host uuid = ""
 host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 ```
-
-delete the previous failed host_uuid in the `libvirtd.conf` file.
+You can delete the previous failed host_uuid in the `libvirtd.conf` file.
 
 ### Restart libvirtd (after updating UUID)
 
@@ -597,9 +574,9 @@ It is common to encounter network issues, because the reserved IP address alread
 
 ---
 
-## Cloudstack Configration and VM Installation
+## Cloudstack Configuration and VM Installation
 
-**<center>[Click for Detailed Utils Explanation](/details/06_cloudstack_configuration.md)</center>**
+**<center>[Click for Detailed VM Installation Explanation](/details/06_cloudstack_configuration.md)</center>**
 
 ### Download the ISO
 

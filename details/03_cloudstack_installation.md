@@ -45,14 +45,12 @@ sudo apt-get install cloudstack-management mysql-server
 
 ## Configure Mysql Config File
 
-Edit MySQL settings for compatibility with CloudStack.
-
+Use the following command to open the MySQL configuration file in edit mode:
 ```bash
-sudo -e/etc/mysql/mysql.conf.d/mysqld.cnf
+sudo -e /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
-Insert or update the following under [mysqld]:
-
+Inside the `mysqld` section of the file, add or update the following lines:
 ```bash
 server-id = 1
 sql-mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ZERO_IN_DATE,NO_ENGINE_SUBSTITUTION"
@@ -62,6 +60,14 @@ max_connections=1000
 log-bin=mysql-bin
 binlog-format = 'ROW'
 ```
+Parameters Explanation:
+* `server-id = 1`: Sets a unique server ID (important for replication setups).
+* `sql-mode`: Enforces strict SQL rules for data integrity.
+* `innodb_rollback_on_timeout = 1`: Rolls back the entire transaction if a lock wait times out.
+* `innodb_lock_wait_timeout = 600`: Sets the lock wait timeout to 600 seconds.
+* `max_connections = 1000`: Allows up to 1000 simultaneous connections.
+* `log-bin = mysql-bin`: Enables binary logging (used in replication and point-in-time recovery).
+* `binlog-format = 'ROW'`: Sets binary logging format to row-based logging (required for some replication setups).
 
 ![Installing Cloudstack and mysql server](../images/cloudstack-installation/02_sql.png)
 
@@ -73,6 +79,7 @@ Restart MySQL to apply changes and verify it's running.
 systemctl restart mysql
 systemctl status mysql
 ```
+> If you see the output contains `active (running)`, this indicates that the MySQL service has started successfully and is functioning properly.
 
 ## Deploy Database as Root and create user name and password
 
@@ -107,6 +114,7 @@ sed -i -e 's/^STATDOPTS=$/STATDOPTS="--port 662 --outgoing-port 2020"/g' /etc/de
 echo "NEED_STATD=yes" >> /etc/default/nfs-common
 sed -i -e 's/^RPCRQUOTADOPTS=$/RPCRQUOTADOPTS="-p 875"/g' /etc/default/quota
 service nfs-kernel-server restart
+exit
 ```
 
 ### Additional Information
