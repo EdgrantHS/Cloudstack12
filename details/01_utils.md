@@ -33,8 +33,8 @@ A configuration for Neovim that is easy to use and has a lot of features. This i
 ```bash
 sudo snap install nvim --classic
 sudo apt install gcc git xclip
-mkdir ~/.config/nvim
-git clone https://github.com/LazyVim/starter ~/.config/nvim
+sudo mkdir ~/.config/nvim
+sudo git clone https://github.com/LazyVim/starter ~/.config/nvim
 ```
 
 ## Configure LazyVim
