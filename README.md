@@ -128,13 +128,15 @@ The netplan configuration is similar to the network/wifi setting in Ubuntu Deskt
 
 ### Netplan
 
-```bash
-cd /etc/netplan
-sudo chmod 600 /etc/netplan/01-netcfg.yaml
-```
-> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
+Find or create a file, for example `/etc/netplan/01-netcfg.yaml` and change the content.
 
 ### Change the IP
+
+Edit the file
+
+```
+sudo -e /etc/netplan/01-netcfg.yaml
+```
 
 ```yaml
 # This is the network config written by 'subiquity'
@@ -169,6 +171,15 @@ network:
         stp: false
         forward-delay: 0
 ```
+
+### Change Permission
+
+```bash
+cd /etc/netplan
+sudo chmod 600 /etc/netplan/01-netcfg.yaml
+```
+> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
+
 
 ### Confirm Netplan
 
