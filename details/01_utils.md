@@ -88,11 +88,11 @@ sudo apt install openssh-server
 To enable SSH root login, we need to edit the SSH configuration file. To do this, run the following command:
 
 ```bash
-sed -i '/#PermitRootLogin prohibit-password/a PermitRootLogin yes' /etc/ssh/sshd_config
+sudo sed -i '/#PermitRootLogin prohibit-password/a PermitRootLogin yes' /etc/ssh/sshd_config
 #restart ssh service
-service ssh restart
+sudo service ssh restart
 #or
-systemctl restart sshd.service
+sudo systemctl restart sshd.service
 ```
 
 Root login is not required for the installation, but it is recommended to enable it for easier access to the host.
