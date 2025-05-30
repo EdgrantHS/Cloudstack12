@@ -318,11 +318,17 @@ These commands configure `libvirtd` to allow TCP connections without authenticat
 
 ```bash
 sudo su
+```
+
+```bash
 echo 'listen_tls = 0' >> /etc/libvirt/libvirtd.conf
 echo 'listen_tcp = 1' >> /etc/libvirt/libvirtd.conf
 echo 'tcp_port = "16509"' >> /etc/libvirt/libvirtd.conf
 echo 'mdns_adv = 0' >> /etc/libvirt/libvirtd.conf
 echo 'auth_tcp = "none"' >> /etc/libvirt/libvirtd.conf
+```
+
+```bash
 exit
 ```
 
@@ -341,9 +347,15 @@ These kernel parameters are adjusted to prevent issues with Docker and other ser
 
 ```bash
 sudo su
+```
+
+```bash
 echo "net.bridge.bridge-nf-call-iptables = 0" >> /etc/sysctl.conf
 echo "net.bridge.bridge-nf-call-arptables = 0" >> /etc/sysctl.conf
 sysctl -p
+```
+
+```bash
 exit
 ```
 
@@ -357,8 +369,14 @@ sudo apt-get install uuid -y
 
 ```bash
 sudo su
+```
+
+```bash
 UUID=$(uuidgen)
 echo host_uuid = "\"$UUID\"" >> /etc/libvirt/libvirtd.conf
+```
+
+```bash
 exit
 ```
 
@@ -407,12 +425,6 @@ To enable proper communication between virtualization services, add the followin
 NETWORK=192.168.1.0/24
 ```
 
-Edit your persistent iptables rules:
-
-```bash
-sudo -e /etc/iptables/rules.v4
-```
-
 Append these rules:
 
 ```bash
@@ -429,6 +441,30 @@ iptables -A INPUT -s $NETWORK -m state --state NEW -p tcp --dport 8080 -j ACCEPT
 iptables -A INPUT -s $NETWORK -m state --state NEW -p tcp --dport 8443 -j ACCEPT
 iptables -A INPUT -s $NETWORK -m state --state NEW -p tcp --dport 9090 -j ACCEPT
 iptables -A INPUT -s $NETWORK -m state --state NEW -p tcp --dport 16514 -j ACCEPT
+```
+
+If the command above fail, append these rules
+
+```bash
+# Allow incoming RPCBind/NFS traffic from the CloudStack network
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p udp --dport 111 -j ACCEPT
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 111 -j ACCEPT
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 2049 -j ACCEPT
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 32803 -j ACCEPT # Mountd
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p udp --dport 32769 -j ACCEPT # NLM
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 892 -j ACCEPT  # Mountd
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 875 -j ACCEPT  # NFS lock manager
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 662 -j ACCEPT  # NFS status monitor
+
+# Allow incoming CloudStack Management Server ports from the CloudStack network
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 8250 -j ACCEPT # CloudStack Agent port
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 8080 -j ACCEPT # CloudStack UI/API (HTTP)
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 8443 -j ACCEPT # CloudStack UI/API (HTTPS)
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 9090 -j ACCEPT # CloudStack DB port
+sudo iptables -A INPUT -s $NETWORK -m conntrack --ctstate NEW -p tcp --dport 16514 -j ACCEPT # Libvirt/KVM
+
+# Allow established and related connections (crucial for return traffic)
+sudo iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
 ```
 
 Make the rules persistent:
