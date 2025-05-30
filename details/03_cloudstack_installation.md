@@ -9,7 +9,7 @@
   - [Configure Mysql Config File](#configure-mysql-config-file)
   - [Restart and check mysql service status](#restart-and-check-mysql-service-status)
   - [Deploy Database as Root and create user name and password](#deploy-database-as-root-and-create-user-name-and-password)
-  - [Setup Primary Storage](#setup-primary-storage)
+  - [Setup Primary and Secondary Storage](#setup-nfs-server-and-storage-directories)
   - [Configure NFS Server](#configure-nfs-server)
     - [Additional Information](#additional-information)
     - [Explanation of NFS Commands](#explanation-of-nfs-commands)
@@ -91,22 +91,26 @@ cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:teep1 -i 192.1
 
 ![Installing Cloudstack and mysql server](../images/cloudstack-installation/03_db.png)
 
-## Setup Primary Storage
+## Setup NFS Server and Storage Directories
 
-Install NFS and configure directories for primary and secondary storage.
-
+### Install NFS Kernel Server and Quota Support.
 ```bash
 sudo su
 apt-get install nfs-kernel-server quota
+```
+> This installs the NFS server and quota management tools, which are essential for setting up and managing shared storage.
+
+### Configure Primary and Secondary Storage Directories.
+```bash
+sudo su
 echo "/export  *(rw,async,no_root_squash,no_subtree_check)" > /etc/exports
 mkdir -p /export/primary /export/secondary
 exportfs -a
 ```
+> This creates the primary and secondary shared storage directories, and adds the export rule so it can be accessed by NFS clients.
 
 ## Configure NFS Server
-
 Edit default NFS service configuration to use fixed ports and enable services.
-
 ```bash
 sudo su
 sed -i -e 's/^RPCMOUNTDOPTS="--manage-gids"$/RPCMOUNTDOPTS="-p 892 --manage-gids"/g' /etc/default/nfs-kernel-server

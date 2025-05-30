@@ -35,6 +35,7 @@ TODO:
     - [Configure Mysql Config File](#configure-mysql-config-file)
     - [Restart and check mysql service status](#restart-mysql-service)
     - [Deploy Database as Root and create user name and password](#deploy-database-as-root-and-create-user-name-and-password)
+    - [Setup NFS Server and Storage Directories](#setup-nfs-server-and-storage-directories)
   - [Configure Cloudstack Host with KVM Hypervisor](#configure-cloudstack-host-with-kvm-hypervisor)
     - [Install KVM and Cloudstack Agent](#install-kvm-and-cloudstack-agent)
     - [Configure KVM Virtualization Management](#configure-kvm-virtualization-management)
@@ -245,6 +246,39 @@ Deploy the CloudStack database using root credentials and set up the default use
 
 ```bash
 sudo cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password -i 192.168.1.220
+```
+
+### Setup NFS Server and Storage Directories
+
+#### Install NFS Kernel Server and Quota Support.
+
+```bash
+sudo su
+apt-get install nfs-kernel-server quota
+```
+This installs the NFS server and quota management tools, which are essential for setting up and managing shared storage.
+
+#### Configure Primary and Secondary Storage Directories.
+```bash
+sudo su
+echo "/export  *(rw,async,no_root_squash,no_subtree_check)" > /etc/exports
+mkdir -p /export/primary /export/secondary
+exportfs -a
+```
+This creates the primary and secondary shared storage directories, and adds the export rule so it can be accessed by NFS clients.
+
+#### Configure NFS Server
+
+Edit default NFS service configuration to use fixed ports and enable services.
+
+```bash
+sudo su
+sed -i -e 's/^RPCMOUNTDOPTS="--manage-gids"$/RPCMOUNTDOPTS="-p 892 --manage-gids"/g' /etc/default/nfs-kernel-server
+sed -i -e 's/^STATDOPTS=$/STATDOPTS="--port 662 --outgoing-port 2020"/g' /etc/default/nfs-common
+echo "NEED_STATD=yes" >> /etc/default/nfs-common
+sed -i -e 's/^RPCRQUOTADOPTS=$/RPCRQUOTADOPTS="-p 875"/g' /etc/default/quota
+service nfs-kernel-server restart
+exit
 ```
 
 ---
@@ -556,7 +590,7 @@ Each zone must have at least **one pod**, which contains clusters and hosts.
 | Field    | Example             |
 | -------- | ------------------- |
 | Provider | `NFS`               |
-| Name     | `Final-Secstor-2`   |
+| Name     | `Final-Secstor-12`   |
 | Server   | Host machine IP: `192.168.1.220`       |
 | Path     | `/export/secondary` |
 
