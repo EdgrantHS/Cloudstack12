@@ -23,9 +23,9 @@ Reset the CloudStack database to ensure a clean setup.
    exit
    ```
 
-3. **Re-run the CloudStack database setup** (replace `192.168.106.199` with your management server IP):
+3. **Re-run the CloudStack database setup** (replace `192.168.1.220` with your management server IP):
    ```bash
-   sudo cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password -i 192.168.106.199
+   sudo cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password -i 192.168.1.220
    ```
 
 ## Step 4: Re-run CloudStack Management Server Setup
