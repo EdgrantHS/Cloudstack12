@@ -43,7 +43,7 @@ sudo systemctl start cloudstack-management
 ## Step 6: Monitor Logs and Access the UI
 1. **Monitor the management server logs** to ensure the service starts correctly:
    ```bash
-   tail -f /var/log/cloudstack/management/management-server.log
+   sudo tail -f /var/log/cloudstack/management/management-server.log
    ```
 
 2. **Access the CloudStack UI** using the real IP address (e.g., `http://192.168.106.199:8080/`):
