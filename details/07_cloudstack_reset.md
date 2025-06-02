@@ -15,7 +15,7 @@ Reset the CloudStack database to ensure a clean setup.
    ```bash
    sudo mysql -u root -p
    ```
-   Enter the new root password (`teep1`) when prompted.
+   Enter the new root password (`password`) when prompted.
 
 2. **Drop the existing CloudStack database**:
    ```sql
