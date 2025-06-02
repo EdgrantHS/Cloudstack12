@@ -683,7 +683,7 @@ This might take a while depending on your internet connection. You can check the
 
 A **Compute Offering** defines the CPU, memory, and other compute resources allocated to virtual machines.
 
-From the sidebar, navigate to `Compute Offering` > `Add Compute Offering`.
+From the sidebar, navigate to `Service Offerings` > `Compute Offering` > `Add Compute Offering`.
 
 Fill in the Details:
 
