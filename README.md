@@ -260,18 +260,26 @@ sudo cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password 
 #### Install NFS Kernel Server and Quota Support.
 
 ```bash
-sudo su
-apt-get install nfs-kernel-server quota
+sudo apt-get install nfs-kernel-server quota
 ```
 This installs the NFS server and quota management tools, which are essential for setting up and managing shared storage.
 
 #### Configure Primary and Secondary Storage Directories.
+
 ```bash
 sudo su
+```
+
+```bash
 echo "/export  *(rw,async,no_root_squash,no_subtree_check)" > /etc/exports
 mkdir -p /export/primary /export/secondary
 exportfs -a
 ```
+
+```bash
+exit
+```
+
 This creates the primary and secondary shared storage directories, and adds the export rule so it can be accessed by NFS clients.
 
 #### Configure NFS Server
@@ -280,11 +288,17 @@ Edit default NFS service configuration to use fixed ports and enable services.
 
 ```bash
 sudo su
+```
+
+```bash
 sed -i -e 's/^RPCMOUNTDOPTS="--manage-gids"$/RPCMOUNTDOPTS="-p 892 --manage-gids"/g' /etc/default/nfs-kernel-server
 sed -i -e 's/^STATDOPTS=$/STATDOPTS="--port 662 --outgoing-port 2020"/g' /etc/default/nfs-common
 echo "NEED_STATD=yes" >> /etc/default/nfs-common
 sed -i -e 's/^RPCRQUOTADOPTS=$/RPCRQUOTADOPTS="-p 875"/g' /etc/default/quota
 service nfs-kernel-server restart
+```
+
+```bash
 exit
 ```
 
