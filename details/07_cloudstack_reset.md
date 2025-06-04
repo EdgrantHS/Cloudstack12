@@ -1,5 +1,5 @@
-# CloudStack Password Reset
-This tutorial guides you through resetting the CloudStack password when you've forgotten it. Follow these steps carefully to restore access and fix the configuration.
+# Reset CloudStack
+This tutorial guides you through resetting CloudStack.
 
 ## Step 1: Stop the CloudStack Management Server
 Stop the CloudStack management server to prevent any conflicts during the reset process.
