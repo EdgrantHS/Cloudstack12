@@ -1,16 +1,6 @@
-<!--
-TODO: 
-- Add Tailscale advertising to utils (done)
-- Add Wifi netplan to utils (done)
-- Add chmod 600 permission change for netplan (done)
-- Refine the 05_website_configuration.md explanation (done)
-- Edit change the IP interface enp1s3 to enp1s0 (done)
-- Add more explanation to the 06_cloudstack_network_configuration.md (done)
-- Add Electrical Engineering Department in the contributor (done)
-- Add video explanation
-  -->
 # Single Node Apache Cloudstack Private Cloud Installation Guide
 
+## Computer Engineering, Department of Electrical Engineering, University Indonesia
 ![image](https://github.com/user-attachments/assets/7f2482b6-7a3c-49ac-912c-8d22d042740b)
 
 ## Table of Contents
@@ -56,9 +46,10 @@ TODO:
     - [Create a Compute Offering](#create-a-compute-offering)
     - [Create a New Instance](#create-a-new-instance)
     - [Cloudstack Network Configuration](#cloudstack-network-configuration)
+  - [Explanation Video](#explanation-video)
 
 ## Contributor
-👨‍💻 Guides Made by Computer Engineering Students from Universitas Indonesia.
+👨‍💻 Guides Made by Group 12
 - [Edgrant Henderson Suryajaya](https://github.com/EdgrantHS)
 - [Miranti Anggunsari](https://www.github.com/rantiaaa)
 - [Muhammad Rifki Pratama](https://github.com/MRifkiPratama)
@@ -829,6 +820,11 @@ Port Forwarding Setup:
 - Click `OK`
 
 You should now be able to access the VM using SSH from your personal computer using the source NAT IP address if you are in the same network.
+
+## Explanation Video
+
+You can watch our video for clearer instruction.
+[![Explanation Video](https://img.youtube.com/vi/b32qZyXFvig/maxresdefault.jpg)](https://www.youtube.com/watch?v=b32qZyXFvig)
 
 # Reset CloudStack
 
