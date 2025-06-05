@@ -53,7 +53,7 @@
     - [Create a Compute Offering](#create-a-compute-offering)
     - [Create a New Instance](#create-a-new-instance)
     - [Cloudstack Network Configuration](#cloudstack-network-configuration)
-- [Reset CloudStack](#reset-cloudstack)
+  - [Reset CloudStack](#reset-cloudstack)
 
 ## Contributor
 
@@ -842,6 +842,6 @@ Port Forwarding Setup:
 
 You should now be able to access the VM using SSH from your personal computer using the source NAT IP address if you are in the same network.
 
-# Reset CloudStack
+## Reset CloudStack
 
 if you need to restart cloudstack, follow these [instruction](/details/07_cloudstack_reset.md) to reset the CloudStack database and password.
