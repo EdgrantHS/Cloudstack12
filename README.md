@@ -60,6 +60,12 @@
 > [!IMPORTANT]
 > Our project is intended for Cloudstack installation and configuration on a single node (the host, management server, hypervisor, and storage) in a single machine. Cloudstack can also be set up in a multi-node environment, for that you can refer to other documentation.
 
+## Explanation Video
+
+You can watch our video for clearer instruction.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b32qZyXFvig?si=dsE3uwgorzf8DxlI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Introduction
 
 Apache CloudStack is an open-source cloud computing platform for deploying and managing large networks of virtual machines. It provides Infrastructure as a Service (IaaS) via a web interface and API.
@@ -820,11 +826,6 @@ Port Forwarding Setup:
 - Click `OK`
 
 You should now be able to access the VM using SSH from your personal computer using the source NAT IP address if you are in the same network.
-
-## Explanation Video
-
-You can watch our video for clearer instruction.
-[![Explanation Video](https://img.youtube.com/vi/b32qZyXFvig/maxresdefault.jpg)](https://www.youtube.com/watch?v=b32qZyXFvig)
 
 # Reset CloudStack
 
