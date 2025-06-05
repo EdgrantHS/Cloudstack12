@@ -94,6 +94,7 @@ sudo apt-get install uuid -y
 ```
 
 Generated a unique ID for every host.
+
 ```bash
 sudo su
 UUID=$(uuidgen)
@@ -113,11 +114,13 @@ exit
 > Scroll to the bottom of the file and check if the UUID is correctly inserted. If it is not, repeat the command `UUID=$(uuidgen)` and check again. You need to delete the previous failed host_uuid in the libvirtd.conf file.
 
 > if the UUID is inserted correctly, you should see something like this:
+>
 > ```bash
 > host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 > ```
 
 > if the UUID is not written correctly, you should see something like this:
+>
 > ```bash
 > host_uuid = ""
 > # or
@@ -125,10 +128,12 @@ exit
 > ```
 
 > After repeating the command `UUID=$(uuidgen)` and checking again, you should see the UUID correctly inserted in the `libvirtd.conf` file.
+>
 > ```bash
 > host uuid = ""
 > host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 > ```
+>
 > You can delete the previous failed host_uuid in the `libvirtd.conf` file.
 
 ![6b](../images/cloudstack-host-kvm/06_check-uuid.png)

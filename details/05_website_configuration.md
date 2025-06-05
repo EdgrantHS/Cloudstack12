@@ -7,6 +7,7 @@ In this page, we will install the CloudStack Management Server, including settin
 - [Website CloudStack Installation](#website-cloudstack-installation)
   - [Table of Contents](#table-of-contents)
   - [Install Cloudstack Management Server](#install-cloudstack-management-server)
+    - [⚠️ Common Errors:](#️-common-errors)
   - [Access the CloudStack Web Interface](#access-the-cloudstack-web-interface)
   - [Add a Zone → Network Configuration](#add-a-zone--network-configuration)
     - [Select Zone Type](#select-zone-type)
@@ -17,6 +18,7 @@ In this page, we will install the CloudStack Management Server, including settin
     - [Configure Guest Traffic](#configure-guest-traffic)
     - [Add Resources](#add-resources)
   - [Launch the Zone](#launch-the-zone)
+
 
 ## Install Cloudstack Management Server
 
@@ -71,6 +73,7 @@ First, you will be asked to change the password. Enter a new password and click 
 ![Apache Cloudstack Website](../images/web/03password.png)
 
 ## Add a Zone → Network Configuration
+
 This part sets up the cloud infrastructure.
 
 ### Select Zone Type
@@ -99,12 +102,12 @@ When you select `Advanced`, you will later on need to configure the network sett
 
 ### Fill Zone Details
 
-| Field          | Example         | Description                     |
-| -------------- | --------------- | ------------------------------- |
-| Name           | `Final-Zone-12` | A descriptive name for the zone |
-| IPv4 DNS 1     | `8.8.8.8`       | Public DNS server               |
+| Field          | Example                          | Description                     |
+| -------------- | -------------------------------- | ------------------------------- |
+| Name           | `Final-Zone-12`                  | A descriptive name for the zone |
+| IPv4 DNS 1     | `8.8.8.8`                        | Public DNS server               |
 | Internal DNS 1 | Host machine IP: `192.168.1.220` | Internal DNS for system VMs     |
-| Hypervisor     | `KVM`           | Type of hypervisor used         |
+| Hypervisor     | `KVM`                            | Type of hypervisor used         |
 
 ![](../images/web/07network.png)
 
@@ -115,13 +118,13 @@ When you select `Advanced`, you will later on need to configure the network sett
 **Add Physical Network**
 
 Leave the physical network as default unless you're using multiple NICs and click **"Next"**.
-  
+
 **Configure Public Traffic**
 
-| Field    | Example         |
-| -------- | --------------- |
-| Gateway  | `192.168.1.1`   |
-| Netmask  | `255.255.255.0` |
+| Field    | Example                              |
+| -------- | ------------------------------------ |
+| Gateway  | `192.168.1.1`                        |
+| Netmask  | `255.255.255.0`                      |
 | Start IP | Unused IP in nework: `192.168.1.221` |
 | End IP   | Unused IP in nework: `192.168.1.225` |
 
@@ -152,7 +155,7 @@ These IPs are used for the pod's management network. Make sure they are also not
 ### Configure Guest Traffic
 
 **VLAN/VNI Range**
-| Field    | Value     |
+| Field | Value |
 | -------- | --------- |
 | VLAN/VNI | 3300-3339 |
 
@@ -180,11 +183,11 @@ How to Fix:
 
 **Host**
 
-| Field    | Example         |
-| -------- | --------------- |
-| Hostname | Host machine IP: `192.168.1.220` |
-| Username | `root`          |
-| Password | Host machine root Password: `******`        |
+| Field    | Example                              |
+| -------- | ------------------------------------ |
+| Hostname | Host machine IP: `192.168.1.220`     |
+| Username | `root`                               |
+| Password | Host machine root Password: `******` |
 
 > Add your host machine IP address, username, and password.
 > This is the host machine that will run the VMs.
@@ -195,14 +198,14 @@ Make sure to use the host machine IP address, not the Tailscale IP address. Also
 
 **Primary Storage**
 
-| Field    | Example             |
-| -------- | ------------------- |
-| Name     | `Final-Primstor-12` |
-| Scope    | `Zone`              |
-| Protocol | `NFS`               |
-| Server   | Host machine IP: `192.168.1.220`     |
-| Path     | `/export/primary`   |
-| Provider | `DefaultPrimary`    |
+| Field    | Example                          |
+| -------- | -------------------------------- |
+| Name     | `Final-Primstor-12`              |
+| Scope    | `Zone`                           |
+| Protocol | `NFS`                            |
+| Server   | Host machine IP: `192.168.1.220` |
+| Path     | `/export/primary`                |
+| Provider | `DefaultPrimary`                 |
 
 > Primary storage holds VM disk volumes.
 
@@ -212,12 +215,12 @@ Make sure the IP address is the host machine IP address, also make sure the path
 
 **Secondary Storage**
 
-| Field    | Example             |
-| -------- | ------------------- |
-| Provider | `NFS`               |
-| Name     | `Final-Secstor-2`   |
-| Server   | Host machine IP: `192.168.1.220`       |
-| Path     | `/export/secondary` |
+| Field    | Example                          |
+| -------- | -------------------------------- |
+| Provider | `NFS`                            |
+| Name     | `Final-Secstor-2`                |
+| Server   | Host machine IP: `192.168.1.220` |
+| Path     | `/export/secondary`              |
 
 > Secondary storage is used for templates, ISOs, and snapshots.
 
@@ -231,6 +234,6 @@ Click **"Launch Zone"** to create the zone with the specified configurations. Th
 
 ![Apache Cloudstack Website](../images/web/17launchprocess.png)
 
-If successful, you will see a message indicating that the zone has been created.  If you encounter any issues, you can click the `Fix Issues` button and you will be redirected to the issue page and change the configuration.
+If successful, you will see a message indicating that the zone has been created. If you encounter any issues, you can click the `Fix Issues` button and you will be redirected to the issue page and change the configuration.
 
 It is common to encounter network issues, because the reserved IP address already used by another device in the network. You can assign a different reserved IP address and try again.

@@ -1,14 +1,17 @@
 # Single Node Apache Cloudstack Private Cloud Installation Guide
 
 ## Computer Engineering, Department of Electrical Engineering, University Indonesia
+
 ![image](https://github.com/user-attachments/assets/7f2482b6-7a3c-49ac-912c-8d22d042740b)
 
 ## Table of Contents
 
 - [Single Node Apache Cloudstack Private Cloud Installation Guide](#single-node-apache-cloudstack-private-cloud-installation-guide)
+  - [Computer Engineering, Department of Electrical Engineering, University Indonesia](#computer-engineering-department-of-electrical-engineering-university-indonesia)
   - [Table of Contents](#table-of-contents)
   - [Contributor](#contributor)
   - [Disclaimer](#disclaimer)
+  - [Explanation Video](#explanation-video)
   - [Introduction](#introduction)
   - [Environment Set Up](#environment-set-up)
     - [Hardware Requirement](#hardware-requirement)
@@ -18,14 +21,18 @@
   - [Network Configuration](#network-configuration)
     - [Netplan](#netplan)
     - [Change the IP](#change-the-ip)
+    - [Change Permission](#change-permission)
     - [Confirm Netplan](#confirm-netplan)
   - [Cloudstack Installation](#cloudstack-installation)
     - [Add CloudStack Repository and GPG Key](#add-cloudstack-repository-and-gpg-key)
     - [Installing Cloudstack and Mysql Server](#installing-cloudstack-and-mysql-server)
     - [Configure Mysql Config File](#configure-mysql-config-file)
-    - [Restart and check mysql service status](#restart-mysql-service)
+    - [Restart MySQL Service](#restart-mysql-service)
     - [Deploy Database as Root and create user name and password](#deploy-database-as-root-and-create-user-name-and-password)
     - [Setup NFS Server and Storage Directories](#setup-nfs-server-and-storage-directories)
+      - [Install NFS Kernel Server and Quota Support.](#install-nfs-kernel-server-and-quota-support)
+      - [Configure Primary and Secondary Storage Directories.](#configure-primary-and-secondary-storage-directories)
+      - [Configure NFS Server](#configure-nfs-server)
   - [Configure Cloudstack Host with KVM Hypervisor](#configure-cloudstack-host-with-kvm-hypervisor)
     - [Install KVM and Cloudstack Agent](#install-kvm-and-cloudstack-agent)
     - [Configure KVM Virtualization Management](#configure-kvm-virtualization-management)
@@ -41,15 +48,17 @@
     - [Access the CloudStack Web Interface](#access-the-cloudstack-web-interface)
     - [Add a Zone → Network Configuration](#add-a-zone--network-configuration)
     - [Launch the Zone](#launch-the-zone)
-  - [Cloudstack Configration and VM Installation](#cloudstack-configration-and-vm-installation)
+  - [Cloudstack Configuration and VM Installation](#cloudstack-configuration-and-vm-installation)
     - [Download the ISO](#download-the-iso)
     - [Create a Compute Offering](#create-a-compute-offering)
     - [Create a New Instance](#create-a-new-instance)
     - [Cloudstack Network Configuration](#cloudstack-network-configuration)
-  - [Explanation Video](#explanation-video)
+- [Reset CloudStack](#reset-cloudstack)
 
 ## Contributor
+
 👨‍💻 Guides Made by Group 12
+
 - [Edgrant Henderson Suryajaya](https://github.com/EdgrantHS)
 - [Miranti Anggunsari](https://www.github.com/rantiaaa)
 - [Muhammad Rifki Pratama](https://github.com/MRifkiPratama)
@@ -175,8 +184,8 @@ network:
 cd /etc/netplan
 sudo chmod 600 /etc/netplan/01-netcfg.yaml
 ```
-> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
 
+> Since netplan configuration files may contain sensitive information, it's recommended to restrict access permission. `600` command ensures that only the root user can read and write the file, enhancing security.
 
 ### Confirm Netplan
 
@@ -221,11 +230,13 @@ sudo apt-get install cloudstack-management mysql-server
 ### Configure Mysql Config File
 
 Use the following command to open the MySQL configuration file in edit mode:
+
 ```bash
 sudo -e /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
 Inside the `mysqld` section of the file, add or update the following lines:
+
 ```bash
 server-id = 1
 sql-mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ZERO_IN_DATE,NO_ENGINE_SUBSTITUTION"
@@ -259,6 +270,7 @@ sudo cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:password 
 ```bash
 sudo apt-get install nfs-kernel-server quota
 ```
+
 This installs the NFS server and quota management tools, which are essential for setting up and managing shared storage.
 
 #### Configure Primary and Secondary Storage Directories.
@@ -402,11 +414,13 @@ sudo -e /etc/libvirt/libvirtd.conf
 Scroll to the bottom of the file and check if the UUID is correctly inserted. If it is not, repeat the command `UUID=$(uuidgen)` and check again. You need to delete the previous failed host_uuid in the libvirtd.conf file.
 
 if the UUID is inserted correctly, you should see something like this:
+
 ```bash
 host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 ```
 
 if the UUID is not written correctly, you should see something like this:
+
 ```bash
 host_uuid = ""
 # or
@@ -414,10 +428,12 @@ host_uuid =
 ```
 
 After repeating the command `UUID=$(uuidgen)` and checking again, you should see the UUID correctly inserted in the `libvirtd.conf` file.
+
 ```bash
 host uuid = ""
 host_uuid = "a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"
 ```
+
 You can delete the previous failed host_uuid in the `libvirtd.conf` file.
 
 ### Restart libvirtd (after updating UUID)
@@ -520,7 +536,6 @@ Open your browser and access the host IP address port 8080.
 > Example: `http://192.168.1.220:8080` if connected to the same network.  
 > Example: `http://100.102.255.28` if using Tailscale.
 
-
 ![Apache Cloudstack Website](images/apache-cloudstack.png)
 
 Default Login:
@@ -558,12 +573,12 @@ Next, choose the **network type**:
 
 **Fill Zone Details**
 
-| Field          | Example         | Description                     |
-| -------------- | --------------- | ------------------------------- |
-| Name           | `Final-Zone-12` | A descriptive name for the zone |
-| IPv4 DNS 1     | `8.8.8.8`       | Public DNS server               |
+| Field          | Example                          | Description                     |
+| -------------- | -------------------------------- | ------------------------------- |
+| Name           | `Final-Zone-12`                  | A descriptive name for the zone |
+| IPv4 DNS 1     | `8.8.8.8`                        | Public DNS server               |
 | Internal DNS 1 | Host machine IP: `192.168.1.220` | Internal DNS for system VMs     |
-| Hypervisor     | `KVM`           | Type of hypervisor used         |
+| Hypervisor     | `KVM`                            | Type of hypervisor used         |
 
 ---
 
@@ -575,10 +590,10 @@ Leave the physical network as default and click **"Next"**.
 
 **Configure Public Traffic**
 
-| Field    | Example         |
-| -------- | --------------- |
-| Gateway  | `192.168.1.1`   |
-| Netmask  | `255.255.255.0` |
+| Field    | Example                              |
+| -------- | ------------------------------------ |
+| Gateway  | `192.168.1.1`                        |
+| Netmask  | `255.255.255.0`                      |
 | Start IP | Unused IP in nework: `192.168.1.221` |
 | End IP   | Unused IP in nework: `192.168.1.225` |
 
@@ -617,36 +632,36 @@ Each zone must have at least **one pod**, which contains clusters and hosts.
 
 **Host**
 
-| Field    | Example         |
-| -------- | --------------- |
-| Hostname | Host machine IP: `192.168.1.220` |
-| Username | `root`          |
-| Password | Host machine root Password: `******`        |
+| Field    | Example                              |
+| -------- | ------------------------------------ |
+| Hostname | Host machine IP: `192.168.1.220`     |
+| Username | `root`                               |
+| Password | Host machine root Password: `******` |
 
 > Add you host machine IP address, username, and password.
 > This is the host machine that will run the VMs.
 
 **Primary Storage**
 
-| Field    | Example             |
-| -------- | ------------------- |
-| Name     | `Final-Primstor-12` |
-| Scope    | `Zone`              |
-| Protocol | `NFS`               |
-| Server   | Host machine IP: `192.168.1.220`     |
-| Path     | `/export/primary`   |
-| Provider | `DefaultPrimary`    |
+| Field    | Example                          |
+| -------- | -------------------------------- |
+| Name     | `Final-Primstor-12`              |
+| Scope    | `Zone`                           |
+| Protocol | `NFS`                            |
+| Server   | Host machine IP: `192.168.1.220` |
+| Path     | `/export/primary`                |
+| Provider | `DefaultPrimary`                 |
 
 > Primary storage holds VM disk volumes.
 
 **Secondary Storage**
 
-| Field    | Example             |
-| -------- | ------------------- |
-| Provider | `NFS`               |
-| Name     | `Final-Secstor-12`   |
-| Server   | Host machine IP: `192.168.1.220`       |
-| Path     | `/export/secondary` |
+| Field    | Example                          |
+| -------- | -------------------------------- |
+| Provider | `NFS`                            |
+| Name     | `Final-Secstor-12`               |
+| Server   | Host machine IP: `192.168.1.220` |
+| Path     | `/export/secondary`              |
 
 > Secondary storage is used for templates, ISOs, and snapshots.
 
@@ -656,7 +671,7 @@ Click **"Launch Zone"** to create the zone with the specified configurations. Th
 
 ![Apache Cloudstack Website](images/web/17launchprocess.png)
 
-If successful, you will see a message indicating that the zone has been created.  If you encounter any issues, you can click the `Fix Issues` button and you will be redirected to the issue page and change the configuration.
+If successful, you will see a message indicating that the zone has been created. If you encounter any issues, you can click the `Fix Issues` button and you will be redirected to the issue page and change the configuration.
 
 It is common to encounter network issues, because the reserved IP address already used by another device in the network. You can assign a different reserved IP address and try again.
 
@@ -680,11 +695,11 @@ From the sidebar, navigate to `Images` > `ISO` > `Register ISO`.
 
 Fill in the Details:
 
-| Field                   | Value            |
-| ----------------------- | ---------------- |
-| URL                    | `<your iso download link>` |
-| Name                    | `<your iso name>` Ex: `Ubuntu Server 22.04` |
-| Description             | `<your iso description>` Ex: `Ubuntu Server 22.04` |
+| Field       | Value                                              |
+| ----------- | -------------------------------------------------- |
+| URL         | `<your iso download link>`                         |
+| Name        | `<your iso name>` Ex: `Ubuntu Server 22.04`        |
+| Description | `<your iso description>` Ex: `Ubuntu Server 22.04` |
 
 Leave the rest as default.
 
@@ -829,4 +844,4 @@ You should now be able to access the VM using SSH from your personal computer us
 
 # Reset CloudStack
 
-if you need to restart cloudstack, follow these [instruction](/details/07_cloudstack_reset.md) to reset the CloudStack database and password. 
+if you need to restart cloudstack, follow these [instruction](/details/07_cloudstack_reset.md) to reset the CloudStack database and password.

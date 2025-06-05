@@ -1,14 +1,21 @@
 # CloudStack Configuration and VM Installation
 
-- [Download ISO](#download-iso)
-- [Create Compute Offering](#create-compute-offering)
-- [Create New Instance](#create-new-instance)
-- [Configure Network](#configure-network)
-- [Launch Instance](#launch-instance)
-- [Ubuntu Server Installation](#ubuntu-server-installation)
-- [Common Error and Warning](#common-errors-and-warnings)
-
 In this section, we will go through the basic steps to configure Apache CloudStack and launch a virtual machine (VM). These steps include downloading the necessary ISO file, setting up compute resources, configuring the network, and deploying your first instance.
+
+## Table of Contents
+
+- [CloudStack Configuration and VM Installation](#cloudstack-configuration-and-vm-installation)
+  - [Table of Contents](#table-of-contents)
+  - [Download ISO](#download-iso)
+  - [Create Compute Offering](#create-compute-offering)
+  - [Create New Instance](#create-new-instance)
+  - [Configure Network](#configure-network)
+    - [If you don’t have an existing network, create an Isolated Network:](#if-you-dont-have-an-existing-network-create-an-isolated-network)
+    - [Configure Instance Details](#configure-instance-details)
+  - [Launch Instance](#launch-instance)
+  - [Ubuntu Server Installation](#ubuntu-server-installation)
+    - [Installation Complete](#installation-complete)
+  - [Common Errors and Warnings](#common-errors-and-warnings)
 
 ## Download ISO
 
@@ -93,18 +100,18 @@ At this point, you need to ensure your VM can connect to the internal or externa
 
 ### If you don’t have an existing network, create an Isolated Network:
 
-| Field | Value           |
-|-------|-----------------|
-| Name  | network-12      |
-| Zone  | final-zone-12   |
+| Field | Value         |
+| ----- | ------------- |
+| Name  | network-12    |
+| Zone  | final-zone-12 |
 
 ### Configure Instance Details
 
 When setting up the instance that will use this network, you’ll be asked for some additional configuration details:
 
-| Field             | Value                 |
-|------------------|-----------------------|
-| Name              | `mizu7`               |
+| Field             | Value                |
+| ----------------- | -------------------- |
+| Name              | `mizu7`              |
 | Keyboard Language | Standard US Keyboard |
 
 ![Configure Network Screenshot](../images/cloudstack_configuration/4addnetwork.png)
@@ -137,12 +144,12 @@ However, if you try to access external resources (e.g., using `ping 8.8.8.8`), y
 
 During installation or configuration, you may encounter some errors or warnings. Here are some common ones and whether you should ignore them or take action:
 
-| Error / Warning Message                          | Should You Ignore? | Explanation / Action                                                                 |
-|--------------------------------------------------|---------------------|--------------------------------------------------------------------------------------|
-| `No network connectivity`                        | ✅ Yes (for now)     | Expected before full network setup. Can be fixed after configuring CloudStack router/NAT. |
-| `ISO did not detach after reboot`               | ❌ No               | Go to the Instance → Storage → Detach ISO manually to avoid boot loop.              |
-| `Host not found` when trying to ping external IP | ✅ Yes (initially)  | Until DNS or gateway is properly configured, this is expected.                      |
-| CloudStack UI shows VM as `Running` but no access | ✅/❌ Depends       | Check firewall/security group and console access; if needed, restart the instance.  |
-| `Permission Denied` when accessing via SSH       | ❌ No               | Likely a credentials or key issue. Check your SSH key setup or user/password.       |
+| Error / Warning Message                           | Should You Ignore? | Explanation / Action                                                                      |
+| ------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------------- |
+| `No network connectivity`                         | ✅ Yes (for now)   | Expected before full network setup. Can be fixed after configuring CloudStack router/NAT. |
+| `ISO did not detach after reboot`                 | ❌ No              | Go to the Instance → Storage → Detach ISO manually to avoid boot loop.                    |
+| `Host not found` when trying to ping external IP  | ✅ Yes (initially) | Until DNS or gateway is properly configured, this is expected.                            |
+| CloudStack UI shows VM as `Running` but no access | ✅/❌ Depends      | Check firewall/security group and console access; if needed, restart the instance.        |
+| `Permission Denied` when accessing via SSH        | ❌ No              | Likely a credentials or key issue. Check your SSH key setup or user/password.             |
 
 If you're unsure about any error, it's always best to document it and check CloudStack logs or UI messages for additional context.

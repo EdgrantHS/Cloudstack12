@@ -6,16 +6,20 @@
   - [Table of Contents](#table-of-contents)
   - [Add CloudStack Repository and GPG Key](#add-cloudstack-repository-and-gpg-key)
   - [Installing Cloudstack and Mysql Server](#installing-cloudstack-and-mysql-server)
+    - [Installing Cloudstack and Mysql Server](#installing-cloudstack-and-mysql-server-1)
   - [Configure Mysql Config File](#configure-mysql-config-file)
   - [Restart and check mysql service status](#restart-and-check-mysql-service-status)
   - [Deploy Database as Root and create user name and password](#deploy-database-as-root-and-create-user-name-and-password)
-  - [Setup Primary and Secondary Storage](#setup-nfs-server-and-storage-directories)
+  - [Setup NFS Server and Storage Directories](#setup-nfs-server-and-storage-directories)
+    - [Install NFS Kernel Server and Quota Support.](#install-nfs-kernel-server-and-quota-support)
+    - [Configure Primary and Secondary Storage Directories.](#configure-primary-and-secondary-storage-directories)
   - [Configure NFS Server](#configure-nfs-server)
     - [Additional Information](#additional-information)
     - [Explanation of NFS Commands](#explanation-of-nfs-commands)
   - [Setup Validation](#setup-validation)
   - [Common Errors and Fixes](#common-errors-and-fixes)
   - [Possible Warning and is it Safe to Ignore?](#possible-warning-and-is-it-safe-to-ignore)
+
 
 ## Add CloudStack Repository and GPG Key
 
@@ -46,11 +50,13 @@ sudo apt-get install cloudstack-management mysql-server
 ## Configure Mysql Config File
 
 Use the following command to open the MySQL configuration file in edit mode:
+
 ```bash
 sudo -e /etc/mysql/mysql.conf.d/mysqld.cnf
 ```
 
 Inside the `mysqld` section of the file, add or update the following lines:
+
 ```bash
 server-id = 1
 sql-mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION,ERROR_FOR_DIVISION_BY_ZERO,NO_ZERO_DATE,NO_ZERO_IN_DATE,NO_ENGINE_SUBSTITUTION"
@@ -60,14 +66,16 @@ max_connections=1000
 log-bin=mysql-bin
 binlog-format = 'ROW'
 ```
+
 Parameters Explanation:
-* `server-id = 1`: Sets a unique server ID (important for replication setups).
-* `sql-mode`: Enforces strict SQL rules for data integrity.
-* `innodb_rollback_on_timeout = 1`: Rolls back the entire transaction if a lock wait times out.
-* `innodb_lock_wait_timeout = 600`: Sets the lock wait timeout to 600 seconds.
-* `max_connections = 1000`: Allows up to 1000 simultaneous connections.
-* `log-bin = mysql-bin`: Enables binary logging (used in replication and point-in-time recovery).
-* `binlog-format = 'ROW'`: Sets binary logging format to row-based logging (required for some replication setups).
+
+- `server-id = 1`: Sets a unique server ID (important for replication setups).
+- `sql-mode`: Enforces strict SQL rules for data integrity.
+- `innodb_rollback_on_timeout = 1`: Rolls back the entire transaction if a lock wait times out.
+- `innodb_lock_wait_timeout = 600`: Sets the lock wait timeout to 600 seconds.
+- `max_connections = 1000`: Allows up to 1000 simultaneous connections.
+- `log-bin = mysql-bin`: Enables binary logging (used in replication and point-in-time recovery).
+- `binlog-format = 'ROW'`: Sets binary logging format to row-based logging (required for some replication setups).
 
 ![Installing Cloudstack and mysql server](../images/cloudstack-installation/02_sql.png)
 
@@ -79,6 +87,7 @@ Restart MySQL to apply changes and verify it's running.
 systemctl restart mysql
 systemctl status mysql
 ```
+
 > If you see the output contains `active (running)`, this indicates that the MySQL service has started successfully and is functioning properly.
 
 ## Deploy Database as Root and create user name and password
@@ -94,23 +103,29 @@ cloudstack-setup-databases cloud:cloud@localhost --deploy-as=root:teep1 -i 192.1
 ## Setup NFS Server and Storage Directories
 
 ### Install NFS Kernel Server and Quota Support.
+
 ```bash
 sudo su
 apt-get install nfs-kernel-server quota
 ```
+
 > This installs the NFS server and quota management tools, which are essential for setting up and managing shared storage.
 
 ### Configure Primary and Secondary Storage Directories.
+
 ```bash
 sudo su
 echo "/export  *(rw,async,no_root_squash,no_subtree_check)" > /etc/exports
 mkdir -p /export/primary /export/secondary
 exportfs -a
 ```
+
 > This creates the primary and secondary shared storage directories, and adds the export rule so it can be accessed by NFS clients.
 
 ## Configure NFS Server
+
 Edit default NFS service configuration to use fixed ports and enable services.
+
 ```bash
 sudo su
 sed -i -e 's/^RPCMOUNTDOPTS="--manage-gids"$/RPCMOUNTDOPTS="-p 892 --manage-gids"/g' /etc/default/nfs-kernel-server
