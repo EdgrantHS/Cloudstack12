@@ -62,9 +62,9 @@
 
 ## Explanation Video
 
-You can watch our video for clearer instruction.
+You can watch our [video](https://www.youtube.com/watch?v=b32qZyXFvig) for clearer instruction.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b32qZyXFvig?si=dsE3uwgorzf8DxlI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Explanation Video](https://img.youtube.com/vi/b32qZyXFvig/maxresdefault.jpg)](https://www.youtube.com/watch?v=b32qZyXFvig)
 
 ## Introduction
 
